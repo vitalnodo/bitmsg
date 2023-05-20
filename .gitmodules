@@ -1,0 +1,3 @@
+[submodule "native/zig-cbc"]
+	path = native/zig-cbc
+	url = https://github.com/jedisct1/zig-cbc
