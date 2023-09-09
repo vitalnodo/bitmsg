@@ -20,8 +20,8 @@ pub fn calc_target(length: u64, TTL: u64, options: POWOptions) u64 {
     // if (((1 << 63) % divisor) * 2 >= divisor) {
     //     target += 1;
     // }
-    var target = @intCast(u128, (1 << 64)) / divisor;
-    return @intCast(u64, target);
+    var target = @as(u128, @intCast((1 << 64))) / divisor;
+    return @as(u64, @intCast(target));
 }
 
 pub fn raw_naive_pow(payload: []const u8, target: u64) u64 {

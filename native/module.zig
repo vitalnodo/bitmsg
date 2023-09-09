@@ -30,13 +30,13 @@ fn encrypt(self: [*c]PyObject, args: [*c]PyObject) callconv(.C) ?[*]PyObject {
         return null;
     }
 
-    var K_actual = @ptrCast([*]u8, K.buf.?)[0..65];
-    var plaintext_actual = @ptrCast(
+    var K_actual = @as([*]u8, @ptrCast(K.buf.?))[0..65];
+    var plaintext_actual = @as(
         [*]u8,
-        plaintext.buf.?,
-    )[0..@intCast(usize, plaintext.len)];
+        @ptrCast(plaintext.buf.?),
+    )[0..@as(usize, @intCast(plaintext.len))];
     var out_ptr_a = py.PyMem_RawMalloc(256 * 1024);
-    var out_ptr = @ptrCast([*]u8, out_ptr_a.?)[0 .. 256 * 1024];
+    var out_ptr = @as([*]u8, @ptrCast(out_ptr_a.?))[0 .. 256 * 1024];
     var out_len = crypto.encrypt(out_ptr, K_actual.*, plaintext_actual) catch 0;
     var res = Py_BuildValue("y#", out_ptr, out_len);
 
@@ -67,15 +67,15 @@ fn decrypt(self: [*c]PyObject, args: [*c]PyObject) callconv(.C) ?[*]PyObject {
         return null;
     }
 
-    var k_actual = @ptrCast([*]u8, k.buf.?)[0..32];
-    var raw_encrypted_actual = @ptrCast(
+    var k_actual = @as([*]u8, @ptrCast(k.buf.?))[0..32];
+    var raw_encrypted_actual = @as(
         [*]u8,
-        raw_encrypted.buf.?,
-    )[0..@intCast(usize, raw_encrypted.len)];
+        @ptrCast(raw_encrypted.buf.?),
+    )[0..@as(usize, @intCast(raw_encrypted.len))];
 
     var out_ptr = py.PyMem_RawMalloc(256 * 1024);
     defer py.PyMem_RawFree(out_ptr);
-    var out_slice = @ptrCast([*]u8, out_ptr.?)[0 .. 256 * 1024];
+    var out_slice = @as([*]u8, @ptrCast(out_ptr.?))[0 .. 256 * 1024];
     var out_len = crypto.decrypt(
         out_slice,
         k_actual.*,
@@ -129,17 +129,17 @@ fn raw_encrypt(
         return null;
     }
 
-    var K_actual = @ptrCast([*]u8, K.buf.?)[0..65];
-    var plaintext_actual = @ptrCast(
+    var K_actual = @as([*]u8, @ptrCast(K.buf.?))[0..65];
+    var plaintext_actual = @as(
         [*]u8,
-        plaintext.buf.?,
-    )[0..@intCast(usize, plaintext.len)];
-    var IV_actual = @ptrCast([*]u8, IV.buf.?)[0..16];
-    var r_actual = @ptrCast([*]u8, r.buf.?)[0..32];
+        @ptrCast(plaintext.buf.?),
+    )[0..@as(usize, @intCast(plaintext.len))];
+    var IV_actual = @as([*]u8, @ptrCast(IV.buf.?))[0..16];
+    var r_actual = @as([*]u8, @ptrCast(r.buf.?))[0..32];
 
     var out_ptr = py.PyMem_RawMalloc(256 * 1024);
     defer py.PyMem_RawFree(out_ptr);
-    var out_slice = @ptrCast([*]u8, out_ptr.?)[0 .. 256 * 1024];
+    var out_slice = @as([*]u8, @ptrCast(out_ptr.?))[0 .. 256 * 1024];
     var out_len = crypto.raw_encrypt(
         out_slice,
         K_actual.*,
@@ -204,18 +204,18 @@ fn raw_decrypt(
         return null;
     }
 
-    var k_actual = @ptrCast([*]u8, k.buf.?)[0..32];
-    var IV_actual = @ptrCast([*]u8, IV.buf.?)[0..16];
-    var R_actual = @ptrCast([*]u8, R.buf.?)[0..65];
-    var ciphertext_actual = @ptrCast(
+    var k_actual = @as([*]u8, @ptrCast(k.buf.?))[0..32];
+    var IV_actual = @as([*]u8, @ptrCast(IV.buf.?))[0..16];
+    var R_actual = @as([*]u8, @ptrCast(R.buf.?))[0..65];
+    var ciphertext_actual = @as(
         [*]u8,
-        ciphertext.buf.?,
-    )[0..@intCast(usize, ciphertext.len)];
-    var MAC_actual = @ptrCast([*]u8, MAC.buf.?)[0..32];
+        @ptrCast(ciphertext.buf.?),
+    )[0..@as(usize, @intCast(ciphertext.len))];
+    var MAC_actual = @as([*]u8, @ptrCast(MAC.buf.?))[0..32];
 
     var out_ptr = py.PyMem_RawMalloc(256 * 1024);
     defer py.PyMem_RawFree(out_ptr);
-    var out_slice = @ptrCast([*]u8, out_ptr.?)[0 .. 256 * 1024];
+    var out_slice = @as([*]u8, @ptrCast(out_ptr.?))[0 .. 256 * 1024];
 
     var out_len = crypto.raw_decrypt(
         out_slice,
@@ -266,10 +266,10 @@ fn naive_pow_raw_naive_pow(
         &payload,
         &target,
     ) != 0)) return null;
-    var payload_actual = @ptrCast(
+    var payload_actual = @as(
         [*]u8,
-        payload.buf.?,
-    )[0..@intCast(usize, payload.len)];
+        @ptrCast(payload.buf.?),
+    )[0..@as(usize, @intCast(payload.len))];
     const nonce = naive_pow.raw_naive_pow(payload_actual, target);
     return Py_BuildValue("k", @as(u64, nonce));
 }
@@ -293,10 +293,10 @@ fn naive_pow_raw_check(
         &POWOptions.averageProofOfWorkNonceTrialsPerByte,
         &POWOptions.payloadLengthExtraBytes,
     ) != 0)) return null;
-    var payload_actual = @ptrCast(
+    var payload_actual = @as(
         [*]u8,
-        payload.buf.?,
-    )[0..@intCast(usize, payload.len)];
+        @ptrCast(payload.buf.?),
+    )[0..@as(usize, @intCast(payload.len))];
     const check = naive_pow.raw_check(
         payload_actual,
         nonce,
