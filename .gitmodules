@@ -1,3 +1,3 @@
-[submodule "native/zig-cbc"]
-	path = native/zig-cbc
-	url = https://github.com/jedisct1/zig-cbc
+[submodule "libbitmsg/zig-cbc"]
+	path = libbitmsg/zig-cbc
+	url = https://github.com/vitalnodo/zig-cbc.git

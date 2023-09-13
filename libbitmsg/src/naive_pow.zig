@@ -2,9 +2,12 @@ const std = @import("std");
 const testing = std.testing;
 const hash = std.crypto.hash.sha2.Sha512;
 
+pub const standardAverageProofOfWorkNonceTrialsPerByte = 1000;
+pub const standardPayloadLengthExtraBytes = 1000;
+
 pub const POWOptions = struct {
-    averageProofOfWorkNonceTrialsPerByte: u64 = 1000,
-    payloadLengthExtraBytes: u64 = 1000,
+    averageProofOfWorkNonceTrialsPerByte: u64 = standardAverageProofOfWorkNonceTrialsPerByte,
+    payloadLengthExtraBytes: u64 = standardPayloadLengthExtraBytes,
 };
 
 pub fn calc_target(length: u64, TTL: u64, options: POWOptions) u64 {
@@ -16,10 +19,6 @@ pub fn calc_target(length: u64, TTL: u64, options: POWOptions) u64 {
         (payloadLength + payloadLengthExtraBytes +
         ((TTL * (payloadLength + payloadLengthExtraBytes)) / (1 << 16)));
 
-    // var target = ((1 << 63) / divisor) * 2;
-    // if (((1 << 63) % divisor) * 2 >= divisor) {
-    //     target += 1;
-    // }
     var target = @as(u128, @intCast((1 << 64))) / divisor;
     return @as(u64, @intCast(target));
 }

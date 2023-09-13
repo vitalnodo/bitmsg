@@ -1,7 +1,7 @@
 # bitmsg [WORK IN PROGRESS]
 bitmsg is an alternative implementation of the bitmessage protocol.
 
-The main difference at the moment is that it uses kaitaistruct for serialization and deserialization, and zig for cryptography and pow purposes. Since the support for serialization for other languages in kaitaistruct is still limited, it was decided to use python and make the native part as a module for python.
+The main difference at the moment is that it uses kaitaistruct for serialization and deserialization, and zig for cryptography and pow purposes. Since the support for serialization for other languages in kaitaistruct is still limited, it was decided to make a module for python for interacting with network.
 
 Despite the implementation of important parts, it is not yet possible to demonstrate real use, but the work is in progress.
 
@@ -21,7 +21,7 @@ git clone https://github.com/vitalnodo/bitmsg.git --recurse-submodules
 
 ```
 
-To install all the necessary modules for python, including the native module 
+To install all the necessary modules for python, including the pybitmsg module 
 
 ```bash
 pip install -r requirements.txt

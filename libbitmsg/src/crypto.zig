@@ -3,15 +3,16 @@ const testing = std.testing;
 const curve = std.crypto.ecc.Secp256k1;
 const hash = std.crypto.hash.sha2.Sha512;
 const HmacSha256 = std.crypto.auth.hmac.sha2.HmacSha256;
-const CBC = @import("zig-cbc/src/main.zig").CBC;
+const CBC = @import("zig-cbc").CBC;
+// So version 3 limits the objects to a maximum size of 256 KiB
+const MAXMSGSIZE = 256 * 1024;
 
 fn AES256CBC_encrypt(
     key: [32]u8,
     IV: [16]u8,
     plaintext: []const u8,
 ) ![]const u8 {
-    // So version 3 limits the objects to a maximum size of 256 KiB
-    const bounded = std.BoundedArray(u8, 256 * 1024);
+    const bounded = std.BoundedArray(u8, MAXMSGSIZE);
     const AES256CBC = CBC(std.crypto.core.aes.Aes256);
     const padded_length = AES256CBC.paddedLength(plaintext.len);
     var array = try bounded.init(padded_length);
@@ -25,8 +26,7 @@ fn AES256CBC_decrypt(
     IV: [16]u8,
     ciphertext: []const u8,
 ) ![]const u8 {
-    // So version 3 limits the objects to a maximum size of 256 KiB
-    const bounded = std.BoundedArray(u8, 256 * 1024);
+    const bounded = std.BoundedArray(u8, MAXMSGSIZE);
     const AES256CBC = CBC(std.crypto.core.aes.Aes256);
     const len = ciphertext.len - 1;
     var array = try bounded.init(len);

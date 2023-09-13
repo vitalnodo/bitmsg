@@ -1,4 +1,4 @@
 git+https://github.com/kaitai-io/kaitai_struct_python_runtime.git@serialization
 
 # Editable install with no version control (native==0.0.1)
--e native
+-e pybitmsg
