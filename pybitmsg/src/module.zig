@@ -4,7 +4,7 @@ const bitmsg = @import("libbitmsg");
 const standard1 = bitmsg.naive_pow.standardAverageProofOfWorkNonceTrialsPerByte;
 const standard2 = bitmsg.naive_pow.standardPayloadLengthExtraBytes;
 
-pub const Crypto = py.class("Crypto", struct {
+pub const Crypto = py.class(struct {
     const Self = @This();
     const MAXMSGSIZE = 256 * 1024;
 
@@ -16,19 +16,14 @@ pub const Crypto = py.class("Crypto", struct {
             r: py.PyObject,
         },
     ) !py.PyBytes {
-        var K: py.PyBuffer = undefined;
+        var K = try args.K.getBuffer(py.PyBuffer.Flags.ND);
         defer K.release();
-        var plaintext: py.PyBuffer = undefined;
+        var plaintext = try args.plaintext.getBuffer(py.PyBuffer.Flags.ND);
         defer plaintext.release();
-        var IV: py.PyBuffer = undefined;
+        var IV = try args.IV.getBuffer(py.PyBuffer.Flags.ND);
         defer IV.release();
-        var r: py.PyBuffer = undefined;
+        var r = try args.r.getBuffer(py.PyBuffer.Flags.ND);
         defer r.release();
-
-        try args.K.getBuffer(&K, py.PyBuffer.Flags.ND);
-        try args.IV.getBuffer(&IV, py.PyBuffer.Flags.ND);
-        try args.plaintext.getBuffer(&plaintext, py.PyBuffer.Flags.ND);
-        try args.r.getBuffer(&r, py.PyBuffer.Flags.ND);
 
         if (K.len != 65) {
             return py.ValueError.raise("K size must be exactly 65 bytes");
@@ -62,13 +57,10 @@ pub const Crypto = py.class("Crypto", struct {
             plaintext: py.PyObject,
         },
     ) !py.PyBytes {
-        var K: py.PyBuffer = undefined;
+        var K = try args.K.getBuffer(py.PyBuffer.Flags.ND);
         defer K.release();
-        var plaintext: py.PyBuffer = undefined;
+        var plaintext = try args.plaintext.getBuffer(py.PyBuffer.Flags.ND);
         defer plaintext.release();
-
-        try args.K.getBuffer(&K, py.PyBuffer.Flags.ND);
-        try args.plaintext.getBuffer(&plaintext, py.PyBuffer.Flags.ND);
 
         if (K.len != 65) {
             return py.ValueError.raise("K size must be exactly 65 bytes");
@@ -97,22 +89,16 @@ pub const Crypto = py.class("Crypto", struct {
             MAC: py.PyObject,
         },
     ) !py.PyBytes {
-        var k: py.PyBuffer = undefined;
+        var k = try args.k.getBuffer(py.PyBuffer.Flags.ND);
         defer k.release();
-        var IV: py.PyBuffer = undefined;
+        var IV = try args.IV.getBuffer(py.PyBuffer.Flags.ND);
         defer IV.release();
-        var R: py.PyBuffer = undefined;
+        var R = try args.R.getBuffer(py.PyBuffer.Flags.ND);
         defer R.release();
-        var ciphertext: py.PyBuffer = undefined;
+        var ciphertext = try args.ciphertext.getBuffer(py.PyBuffer.Flags.ND);
         defer ciphertext.release();
-        var MAC: py.PyBuffer = undefined;
+        var MAC = try args.MAC.getBuffer(py.PyBuffer.Flags.ND);
         defer MAC.release();
-
-        try args.k.getBuffer(&k, py.PyBuffer.Flags.ND);
-        try args.IV.getBuffer(&IV, py.PyBuffer.Flags.ND);
-        try args.R.getBuffer(&R, py.PyBuffer.Flags.ND);
-        try args.ciphertext.getBuffer(&ciphertext, py.PyBuffer.Flags.ND);
-        try args.MAC.getBuffer(&MAC, py.PyBuffer.Flags.ND);
 
         if (k.len != 32) {
             return py.ValueError.raise("k size must be exactly 65 bytes");
@@ -150,13 +136,10 @@ pub const Crypto = py.class("Crypto", struct {
             ciphertext: py.PyObject,
         },
     ) !py.PyBytes {
-        var k: py.PyBuffer = undefined;
+        var k = try args.k.getBuffer(py.PyBuffer.Flags.ND);
         defer k.release();
-        var ciphertext: py.PyBuffer = undefined;
+        var ciphertext = try args.ciphertext.getBuffer(py.PyBuffer.Flags.ND);
         defer ciphertext.release();
-
-        try args.k.getBuffer(&k, py.PyBuffer.Flags.ND);
-        try args.ciphertext.getBuffer(&ciphertext, py.PyBuffer.Flags.ND);
 
         if (k.len != 32) {
             return py.ValueError.raise("k size must be exactly 32 bytes");
@@ -177,7 +160,7 @@ pub const Crypto = py.class("Crypto", struct {
     }
 });
 
-pub const NaivePow = py.class("NaivePow", struct {
+pub const NaivePow = py.class(struct {
     const Self = @This();
 
     pub fn calc_target(
@@ -204,9 +187,7 @@ pub const NaivePow = py.class("NaivePow", struct {
             target: u64,
         },
     ) !u64 {
-        var payload: py.PyBuffer = undefined;
-        defer payload.release();
-        try args.payload.getBuffer(&payload, py.PyBuffer.Flags.ND);
+        var payload = try args.payload.getBuffer(py.PyBuffer.Flags.ND);
         return bitmsg.naive_pow.raw_naive_pow(
             payload.asSlice(u8),
             args.target,
@@ -222,9 +203,8 @@ pub const NaivePow = py.class("NaivePow", struct {
             payloadLengthExtraBytes: u64 = standard2,
         },
     ) !bool {
-        var payload: py.PyBuffer = undefined;
+        var payload = try args.payload.getBuffer(py.PyBuffer.Flags.ND);
         defer payload.release();
-        try args.payload.getBuffer(&payload, py.PyBuffer.Flags.ND);
         return bitmsg.naive_pow.raw_check(
             payload.asSlice(u8),
             args.nonce,
@@ -238,5 +218,5 @@ pub const NaivePow = py.class("NaivePow", struct {
 });
 
 comptime {
-    py.module(@This());
+    py.rootmodule(@This());
 }

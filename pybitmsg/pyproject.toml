@@ -15,12 +15,12 @@ python = "^3.11"
 [tool.poetry.build]
 script = "build.py"
 
-[tool.poetry.group.dev.dependencies]
-ziggy-pydust = "^0.4"
-
 [build-system]
-requires = ["poetry-core", "ziggy-pydust"]
+requires = ["poetry-core", "ziggy-pydust==0.23.1"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ziggy-pydust = "==0.23.1"
 
 [tool.pydust]
 self_managed = true

@@ -1,0 +1,8 @@
+{
+    "build_options": [
+        {
+            "name": "python-exe",
+            "value": "venv/bin/python"
+        }
+    ]
+}
