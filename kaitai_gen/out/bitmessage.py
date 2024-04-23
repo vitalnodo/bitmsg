@@ -1,17 +1,18 @@
 # This is a generated file! Please edit source .ksy file and use kaitai-struct-compiler to rebuild
+# type: ignore
 
 import kaitaistruct
 from kaitaistruct import ReadWriteKaitaiStruct, KaitaiStream, BytesIO
-from enum import Enum
+from enum import IntEnum
 
 
-if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 9):
-    raise Exception("Incompatible Kaitai Struct Python API: 0.9 or later is required, but you have %s" % (kaitaistruct.__version__))
+if getattr(kaitaistruct, 'API_VERSION', (0, 9)) < (0, 11):
+    raise Exception("Incompatible Kaitai Struct Python API: 0.11 or later is required, but you have %s" % (kaitaistruct.__version__))
 
 import vlq_base128_be
 class Bitmessage(ReadWriteKaitaiStruct):
 
-    class ObjectTypeEnum(Enum):
+    class ObjectTypeEnum(IntEnum):
         getpubkey = 0
         pubkey = 1
         msg = 2
@@ -334,7 +335,7 @@ class Bitmessage(ReadWriteKaitaiStruct):
         def _read(self):
             self.len = vlq_base128_be.VlqBase128Be(self._io)
             self.len._read()
-            self.value = (self._io.read_bytes(self.len.value)).decode(u"ASCII")
+            self.value = (self._io.read_bytes(self.len.value)).decode("ASCII")
 
 
         def _fetch_instances(self):
@@ -827,7 +828,7 @@ class Bitmessage(ReadWriteKaitaiStruct):
             super(Bitmessage.MessageObjectType, self)._write__seq(io)
             self._io.write_u8be(self.nonce)
             self._io.write_u8be(self.expires_time)
-            self._io.write_u4be(self.object_payload_type.value)
+            self._io.write_u4be(int(self.object_payload_type))
             self.version._write__seq(self._io)
             self.stream_number._write__seq(self._io)
             _on = self.object_payload_type
@@ -931,7 +932,7 @@ class Bitmessage(ReadWriteKaitaiStruct):
             self.magic = self._io.read_bytes(4)
             if not (self.magic == b"\xE9\xBE\xB4\xD9"):
                 raise kaitaistruct.ValidationNotEqualError(b"\xE9\xBE\xB4\xD9", self.magic, self._io, u"/types/message_header/seq/0")
-            self.command = (KaitaiStream.bytes_terminate(self._io.read_bytes(12), 0, False)).decode(u"ASCII")
+            self.command = (KaitaiStream.bytes_terminate(self._io.read_bytes(12), 0, False)).decode("ASCII")
             self.length = self._io.read_u4be()
             self.checksum = self._io.read_u4be()
 
@@ -953,7 +954,7 @@ class Bitmessage(ReadWriteKaitaiStruct):
             if (len(self.magic) != 4):
                 raise kaitaistruct.ConsistencyError(u"magic", len(self.magic), 4)
             if not (self.magic == b"\xE9\xBE\xB4\xD9"):
-                raise kaitaistruct.ValidationNotEqualError(b"\xE9\xBE\xB4\xD9", self.magic, self._io, u"/types/message_header/seq/0")
+                raise kaitaistruct.ValidationNotEqualError(b"\xE9\xBE\xB4\xD9", self.magic, None, u"/types/message_header/seq/0")
             if (len((self.command).encode(u"ASCII")) > 12):
                 raise kaitaistruct.ConsistencyError(u"command", len((self.command).encode(u"ASCII")), 12)
             if (KaitaiStream.byte_array_index_of((self.command).encode(u"ASCII"), 0) != -1):

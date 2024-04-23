@@ -6,12 +6,12 @@ The main difference at the moment is that it uses kaitaistruct for serialization
 Despite the implementation of important parts, it is not yet possible to demonstrate real use, but the work is in progress.
 
 ## Commands
-To get started, install kaitaistruct that supports serialization according to the instructions from [here](https://https://doc.kaitai.io/serialization.html)
+To get started, install kaitaistruct that supports serialization according to the instructions from [here](https://doc.kaitai.io/serialization.html)
 
 Then, after changing the protocol description, you can run the following command to generate new up-to-date files for serialization and deserialization
 ```bash
-    kaitai-struct-compiler kaitai/bitmessage.ksy --read-write --target python \
-        --outdir kaitai/out
+    kaitai-struct-compiler kaitai_gen/bitmessage.ksy --read-write --target python \
+        --outdir kaitai_gen/out
 ```
 
 To clone this repo
