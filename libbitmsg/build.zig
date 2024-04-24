@@ -15,8 +15,8 @@ pub fn build(b: *std.Build) void {
     // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
 
-    const lib = b.addStaticLibrary(.{
-        .name = "libbitmsg",
+    const lib = b.addSharedLibrary(.{
+        .name = "bitmsg",
         // In this case the main source file is merely a path, however, in more
         // complicated build scripts, this could be a generated file.
         .root_source_file = .{ .path = "src/main.zig" },
@@ -44,27 +44,4 @@ pub fn build(b: *std.Build) void {
     // This will evaluate the `test` step rather than the default, which is "install".
     const test_step = b.step("test", "Run library tests");
     test_step.dependOn(&run_main_tests.step);
-
-    const zig_cbc_dep = b.anonymousDependency(
-        "./zig-cbc",
-        @import("zig-cbc/build.zig"),
-        .{},
-    );
-    lib.addModule("zig-cbc", zig_cbc_dep.module("zig-cbc"));
-    main_tests.addModule("zig-cbc", zig_cbc_dep.module("zig-cbc"));
-
-    _ = b.addModule(
-        "libbitmsg",
-        .{
-            .source_file = .{
-                .path = "./src/main.zig",
-            },
-            .dependencies = &.{
-                .{
-                    .name = "zig-cbc",
-                    .module = zig_cbc_dep.module("zig-cbc"),
-                },
-            },
-        },
-    );
 }

@@ -5,7 +5,6 @@ import select
 import sys
 sys.path.append("kaitai_gen/out")
 
-from pybitmsg import bitmsg
 from kaitai_gen.out import bitmessage as b
 from kaitaistruct import ValidationNotEqualError
 from assemble import *

@@ -172,11 +172,3 @@ cython_debug/
 
 zig-cache/
 zig-out/
-/release/
-/debug/
-/build/
-/build-*/
-/docgen_tmp/
-
-pybitmsg/naive_test.py
-pybitmsg/zls.build.json

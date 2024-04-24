@@ -3,7 +3,7 @@ const testing = std.testing;
 const curve = std.crypto.ecc.Secp256k1;
 const hash = std.crypto.hash.sha2.Sha512;
 const HmacSha256 = std.crypto.auth.hmac.sha2.HmacSha256;
-const CBC = @import("zig-cbc").CBC;
+const CBC = @import("CBC.zig").CBC;
 // So version 3 limits the objects to a maximum size of 256 KiB
 const MAXMSGSIZE = 256 * 1024;
 

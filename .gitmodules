@@ -1,3 +1,0 @@
-[submodule "libbitmsg/zig-cbc"]
-	path = libbitmsg/zig-cbc
-	url = https://github.com/vitalnodo/zig-cbc.git
